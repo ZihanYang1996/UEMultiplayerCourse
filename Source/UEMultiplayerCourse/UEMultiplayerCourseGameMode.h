@@ -13,6 +13,12 @@ class AUEMultiplayerCourseGameMode : public AGameModeBase
 
 public:
 	AUEMultiplayerCourseGameMode();
+
+	UFUNCTION(BlueprintCallable)
+	void HostLANGame();
+
+	UFUNCTION(BlueprintCallable)
+	void JoinLANGame();	
 };
 
 
