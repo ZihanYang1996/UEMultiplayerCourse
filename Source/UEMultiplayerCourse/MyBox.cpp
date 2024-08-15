@@ -40,6 +40,7 @@ void AMyBox::BeginPlay()
 	if (HasAuthority())
 	{
 		TextRender->SetText(FText::FromString(TEXT("Has Authority")));
+		GetWorld()->GetTimerManager().SetTimer(TestTimerHandle, this, &AMyBox::DecreaseReplicatedVar, 2.0f, false);
 	}
 	else
 	{
@@ -51,7 +52,7 @@ void AMyBox::BeginPlay()
 void AMyBox::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+#if 0	
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 	{
 		if (PC->IsInputKeyDown(EKeys::SpaceBar) && HasAuthority())
@@ -60,6 +61,7 @@ void AMyBox::Tick(float DeltaTime)
 			OnRep_REplicatedVar();
 		}
 	}
+#endif	
 	TextRender_ReplicatedVar->SetText(FText::FromString(FString::Printf(TEXT("ReplicatedVar: %f"), ReplicatedVar)));
 }
 
@@ -81,5 +83,19 @@ void AMyBox::OnRep_REplicatedVar()
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Call from: %d"), static_cast<int>(GPlayInEditorID)));
+	}
+}
+
+void AMyBox::DecreaseReplicatedVar()
+{
+	ReplicatedVar -= 1.0f;
+	OnRep_REplicatedVar();
+	if (ReplicatedVar > 0.0f)
+	{
+		GetWorld()->GetTimerManager().SetTimer(TestTimerHandle, this, &AMyBox::DecreaseReplicatedVar, 2.0f, false);
+	}
+	else
+	{
+		ReplicatedVar = 0.0f;
 	}
 }

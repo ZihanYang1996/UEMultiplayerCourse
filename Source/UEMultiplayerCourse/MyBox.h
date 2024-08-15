@@ -42,4 +42,9 @@ private:
 
 	UFUNCTION()
 	void OnRep_REplicatedVar();
+
+	FTimerHandle TestTimerHandle;
+
+	void DecreaseReplicatedVar();
+	
 };
