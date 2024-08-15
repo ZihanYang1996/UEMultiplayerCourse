@@ -15,6 +15,7 @@ AMyBox::AMyBox()
 
 	CubeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CubeMesh"));
 	SetRootComponent(CubeMesh);
+	CubeMesh->SetIsReplicated(true);  // Component is also need to be set manually to replicate
 
 	TextRender = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRender"));
 	TextRender->SetupAttachment(CubeMesh);
@@ -24,7 +25,8 @@ AMyBox::AMyBox()
 
 	ReplicatedVar = 100.0f;
 
-	SetReplicates(true);
+	
+	
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +34,9 @@ void AMyBox::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetReplicates(true);
+	SetReplicateMovement(true);
+	
 	if (HasAuthority())
 	{
 		TextRender->SetText(FText::FromString(TEXT("Has Authority")));
@@ -52,6 +57,7 @@ void AMyBox::Tick(float DeltaTime)
 		if (PC->IsInputKeyDown(EKeys::SpaceBar) && HasAuthority())
 		{
 			ReplicatedVar = FMath::RandRange(0.0f, 100.0f);
+			OnRep_REplicatedVar();
 		}
 	}
 	TextRender_ReplicatedVar->SetText(FText::FromString(FString::Printf(TEXT("ReplicatedVar: %f"), ReplicatedVar)));
@@ -62,4 +68,18 @@ void AMyBox::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimePr
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMyBox, ReplicatedVar);
+}
+
+void AMyBox::OnRep_REplicatedVar()
+{
+	if (HasAuthority())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Call from Server")));
+		FVector CurrenLocation = GetActorLocation();
+		SetActorLocation(FVector(CurrenLocation.X, CurrenLocation.Y, CurrenLocation.Z + 50));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Call from: %d"), static_cast<int>(GPlayInEditorID)));
+	}
 }

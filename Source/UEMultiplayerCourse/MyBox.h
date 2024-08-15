@@ -37,6 +37,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	UTextRenderComponent* TextRender_ReplicatedVar;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing=OnRep_REplicatedVar)
 	float ReplicatedVar;
+
+	UFUNCTION()
+	void OnRep_REplicatedVar();
 };
