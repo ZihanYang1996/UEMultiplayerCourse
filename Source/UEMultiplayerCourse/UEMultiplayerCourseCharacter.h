@@ -72,5 +72,8 @@ public:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void ServerRPCTest();
+
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* SphereMesh;
 };
 
