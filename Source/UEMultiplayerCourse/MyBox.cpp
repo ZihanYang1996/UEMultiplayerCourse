@@ -76,13 +76,13 @@ void AMyBox::OnRep_REplicatedVar()
 {
 	if (HasAuthority())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Call from Server")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Call from Server")));
 		FVector CurrenLocation = GetActorLocation();
 		SetActorLocation(FVector(CurrenLocation.X, CurrenLocation.Y, CurrenLocation.Z + 50));
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Call from: %d"), static_cast<int>(GPlayInEditorID)));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Call from: %d"), static_cast<int>(GPlayInEditorID)));
 	}
 }
 

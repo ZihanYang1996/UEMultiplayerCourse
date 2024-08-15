@@ -128,3 +128,11 @@ void AUEMultiplayerCourseCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+void AUEMultiplayerCourseCharacter::ServerRPCTest_Implementation()
+{
+	if (HasAuthority())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Server: ServerRPCTest_Implementation"));
+	}
+}
