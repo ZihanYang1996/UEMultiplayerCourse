@@ -137,10 +137,13 @@ void AUEMultiplayerCourseCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AUEMultiplayerCourseCharacter::ServerRPCTest_Implementation()
+void AUEMultiplayerCourseCharacter::ServerRPCTest_Implementation(int MyArg)
 {
 	if (HasAuthority())
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, FString::Printf(TEXT("MyArg: %d"), MyArg));
+		
+		
 		AStaticMeshActor* StaticMeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
 		if (StaticMeshActor)
 		{
@@ -173,4 +176,13 @@ void AUEMultiplayerCourseCharacter::ServerRPCTest_Implementation()
 			}
 		}
 	}
+}
+
+bool AUEMultiplayerCourseCharacter::ServerRPCTest_Validate(int MyArg)
+{
+	if (MyArg >= 0 && MyArg <= 100)
+	{
+		return false;
+	}
+	return true;
 }

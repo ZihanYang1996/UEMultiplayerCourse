@@ -70,8 +70,8 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void ServerRPCTest();
+	UFUNCTION(Server, Reliable, WithValidation, BlueprintCallable)
+	void ServerRPCTest(int MyArg);
 
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* SphereMesh;
