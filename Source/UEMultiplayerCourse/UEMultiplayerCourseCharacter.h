@@ -75,5 +75,11 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* SphereMesh;
+
+	UFUNCTION(Client, Reliable, BlueprintCallable)
+	void ClientRPCTest();
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ExplosionEffect;
 };
 

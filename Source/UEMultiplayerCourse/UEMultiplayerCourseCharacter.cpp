@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Engine/StaticMeshActor.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -185,4 +186,9 @@ bool AUEMultiplayerCourseCharacter::ServerRPCTest_Validate(int MyArg)
 		return false;
 	}
 	return true;
+}
+
+void AUEMultiplayerCourseCharacter::ClientRPCTest_Implementation()
+{
+	UGameplayStatics::SpawnEmitterAttached(ExplosionEffect, RootComponent, NAME_None, FVector(0, 0, 100));
 }
