@@ -40,7 +40,7 @@ void AMyBox::BeginPlay()
 	if (HasAuthority())
 	{
 		TextRender->SetText(FText::FromString(TEXT("Has Authority")));
-		GetWorld()->GetTimerManager().SetTimer(TestTimerHandle, this, &AMyBox::DecreaseReplicatedVar, 2.0f, false);
+		GetWorld()->GetTimerManager().SetTimer(TestTimerHandle, this, &AMyBox::MulticastRPCExplode, 2.0f, false);
 	}
 	else
 	{
@@ -97,5 +97,14 @@ void AMyBox::DecreaseReplicatedVar()
 	else
 	{
 		ReplicatedVar = 0.0f;
+	}
+}
+
+void AMyBox::MulticastRPCExplode_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, FString::Printf(TEXT("MulticastRPCExplode_Implementation: %s"), HasAuthority() ? TEXT("Server") : TEXT("Client")));
+	if (HasAuthority())
+	{
+		GetWorld()->GetTimerManager().SetTimer(TestTimerHandle, this, &AMyBox::MulticastRPCExplode, 2.0f, false);
 	}
 }
