@@ -4,6 +4,7 @@
 #include "MyBox.h"
 
 #include "Components/TextRenderComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Net/UnrealNetwork.h"
 #include "SparseVolumeTexture/SparseVolumeTexture.h"
 
@@ -102,7 +103,12 @@ void AMyBox::DecreaseReplicatedVar()
 
 void AMyBox::MulticastRPCExplode_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, FString::Printf(TEXT("MulticastRPCExplode_Implementation: %s"), HasAuthority() ? TEXT("Server") : TEXT("Client")));
+	if (!IsRunningDedicatedServer())
+	{
+		UGameplayStatics::SpawnEmitterAttached(ExplosionEffect, CubeMesh, NAME_None, FVector(0, 0, 100));
+		// UGameplayStatics::SpawnEmitterAtLocation(this, ExplosionEffect, GetActorLocation() + FVector(0, 0, 100));
+	}
+	// GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, FString::Printf(TEXT("MulticastRPCExplode_Implementation: %s"), HasAuthority() ? TEXT("Server") : TEXT("Client")));
 	if (HasAuthority())
 	{
 		GetWorld()->GetTimerManager().SetTimer(TestTimerHandle, this, &AMyBox::MulticastRPCExplode, 2.0f, false);

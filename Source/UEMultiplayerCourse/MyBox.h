@@ -49,5 +49,8 @@ private:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastRPCExplode();
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ExplosionEffect;
 	
 };
